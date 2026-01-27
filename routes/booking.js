@@ -4,6 +4,8 @@ require("../models/connection");
 // const Trip = require("../models/trips");
 const Booking = require("../models/bookings");
 
+// *** URL pour le fetch : http://localhost:3000/booking
+
 // Afficher tous les trips du booking (les purchased)
 router.get("/", (req, res) => {
   Booking.find().then((bookingData) => {
