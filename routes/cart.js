@@ -31,5 +31,7 @@ router.post("/", (req, res) => {
     });
   }
 });
+//route delete sur chaque trip
+router.delete();
 
 module.exports = router;
