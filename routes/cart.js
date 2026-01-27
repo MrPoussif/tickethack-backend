@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 require("../models/connection");
-// const Trip = require("../models/trips");
+
 const Cart = require("../models/carts");
 const Booking = require("../models/bookings");
 
@@ -16,22 +16,23 @@ router.get("/", (req, res) => {
 
 // Ajouter les trips du panier au booking après click purchase puis vide le panier
 router.post("/", (req, res) => {
-  // TODOS ajouter une boucle pour ajouter chaque trip au booking
+  // TODOS faire une boucle pour ajouter chaque trip au booking
+  Cart.find().then((cartData) => {
+    for (let trip of cartData) {
+      const newBooking = new Booking({
+        departure: trip.departure,
+        arrival: trip.arrival,
+        date: trip.date,
+        price: trip.price,
+      });
+      newBooking.save().then();
+    }
+  });
+  Cart.deleteMany().then(() => {
+    res.send("Cart empty");
+  });
 
-  // for (let trip of cart) {
-  const newBooking = new Booking({
-    departure: req.body.departure,
-    arrival: req.body.arrival,
-    date: new Date(req.body.date),
-    price: req.body.price,
-  });
-  newBooking.save().then((tripData) => {
-    res.json({ result: true, msg: "New trip purchased!", trip: tripData });
-  });
   // Vide le panier
-  // Cart.deleteMany().then(() => {
-  //   res.send("Cart empty");
-  // });
 });
 
 // TODO route delete d'un trip du cart
