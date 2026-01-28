@@ -19,8 +19,8 @@ router.get("/", function (req, res) {
     res.json({ result: false, error: "Missing or empty fields" });
   } else {
     Trip.find({
-      departure: req.body.departure,
-      arrival: req.body.arrival,
+      departure: { $regex: req.body.departure, $options: "i" },
+      arrival: { $regex: req.body.arrival, $options: "i" },
       // TODO sûrement faire RegExp avec la date pour chercher sans l'horaire
       date: req.body.date,
     }).then((tripsData) => {

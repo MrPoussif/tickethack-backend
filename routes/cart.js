@@ -16,7 +16,6 @@ router.get("/", (req, res) => {
 
 // Ajouter les trips du panier au booking après click purchase puis vide le panier
 router.post("/", (req, res) => {
-  // TODOS faire une boucle pour ajouter chaque trip au booking
   Cart.find().then((cartData) => {
     for (let trip of cartData) {
       const newBooking = new Booking({
@@ -36,6 +35,10 @@ router.post("/", (req, res) => {
 });
 
 // TODO route delete d'un trip du cart
-router.delete("/", (req, res) => {});
+router.delete("/:id", (req, res) => {
+  Cart.deleteOne({ _id: req.params.id }).then(() => {
+    res.json({ result: true });
+  });
+});
 
 module.exports = router;
