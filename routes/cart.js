@@ -34,10 +34,10 @@ router.post("/", (req, res) => {
   // Vide le panier
 });
 
-// TODO route delete d'un trip du cart
+// Supprime un trip du cart
 router.delete("/:id", (req, res) => {
   Cart.deleteOne({ _id: req.params.id }).then(() => {
-    res.json({ result: true });
+    res.json({ result: true, msg: "Trip deleted" });
   });
 });
 
