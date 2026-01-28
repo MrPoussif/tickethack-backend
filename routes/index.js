@@ -13,16 +13,18 @@ const Cart = require("../models/carts");
 // 		headers: { 'Content-Type': 'application/json' },
 // 		body: JSON.stringify({ departure,arrival,date }),
 // TODOS ajouter RegExp pour la casse des inputs
-router.get("/", function (req, res) {
+router.post("/search", function (req, res) {
   const fields = ["departure", "arrival", "date"];
+  const start = new Date(req.body.date);
+  const end = new Date(req.body.date);
+  end.setDate(end.getDate() + 1);
   if (checkBody(req.body, fields) === false) {
     res.json({ result: false, error: "Missing or empty fields" });
   } else {
     Trip.find({
-      departure: { $regex: req.body.departure, $options: "i" },
-      arrival: { $regex: req.body.arrival, $options: "i" },
-      // TODO sûrement faire RegExp avec la date pour chercher sans l'horaire
-      date: req.body.date,
+      departure: { $regex: new RegExp(req.body.departure, "i") },
+      arrival: { $regex: new RegExp(req.body.arrival, "i") },
+      date: { $gte: start, $lt: end },
     }).then((tripsData) => {
       res.json({ result: true, trips: tripsData });
     });
@@ -43,5 +45,3 @@ router.post("/", function (req, res) {
 });
 
 module.exports = router;
-
-// cityName: { $regex: new RegExp(req.params.cityName, "i") }
