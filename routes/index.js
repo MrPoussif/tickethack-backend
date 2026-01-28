@@ -15,13 +15,14 @@ const Cart = require("../models/carts");
 // TODOS ajouter RegExp pour la casse des inputs
 router.get("/", function (req, res) {
   const fields = ["departure", "arrival", "date"];
-  if (checkBody(req.query, fields) === false) {
+  if (checkBody(req.body, fields) === false) {
     res.json({ result: false, error: "Missing or empty fields" });
   } else {
     Trip.find({
-      departure: req.query.departure.toLowerCase(),
-      arrival: req.query.arrival.toLowerCase(),
-      date: req.query.date,
+      departure: { $regex: req.body.departure, $options: "i" },
+      arrival: { $regex: req.body.arrival, $options: "i" },
+      // TODO sûrement faire RegExp avec la date pour chercher sans l'horaire
+      date: req.body.date,
     }).then((tripsData) => {
       res.json({ result: true, trips: tripsData });
     });
